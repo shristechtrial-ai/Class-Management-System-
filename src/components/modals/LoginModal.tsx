@@ -22,7 +22,6 @@ const loginSchema = z.object({
 
 type LoginForm = z.infer<typeof loginSchema>;
 
-// Mock user roles for demonstration
 const mockUsers: Record<string, { role: keyof typeof siteConfig.dashboards; name: string }> = {
   "admin@school.com": { role: "admin", name: "Admin User" },
   "counselor@school.com": { role: "counselor", name: "Counselor User" },
@@ -33,7 +32,7 @@ const mockUsers: Record<string, { role: keyof typeof siteConfig.dashboards; name
 
 export function LoginModal({ isOpen, onClose }: LoginModalProps) {
   const [showPassword, setShowPassword] = useState(false);
-  
+
   const {
     register,
     handleSubmit,
@@ -45,16 +44,15 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
   const onSubmit = async (data: LoginForm) => {
     try {
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
+
       const user = mockUsers[data.email.toLowerCase()];
-      
+
       if (user) {
         toast({
           title: `Welcome, ${user.name}!`,
           description: `Redirecting to ${user.role} dashboard...`,
         });
-        
-        // In a real app, this would redirect to the actual dashboard
+
         setTimeout(() => {
           window.location.href = siteConfig.dashboards[user.role];
         }, 1500);
@@ -64,7 +62,7 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
           description: "Redirecting to your dashboard...",
         });
       }
-      
+
       onClose();
     } catch {
       toast({
@@ -87,16 +85,16 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
             onClick={onClose}
             className="fixed inset-0 bg-foreground/60 backdrop-blur-sm z-50"
           />
-          
-          {/* Modal */}
+
+          {/* Modal (UPDATED CENTERED POSITION) */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ duration: 0.2 }}
-            className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md z-50 px-4"
+            className="fixed inset-0 flex items-center justify-center z-50 px-4"
           >
-            <div className="bg-card rounded-2xl shadow-elevated border border-border overflow-hidden">
+            <div className="bg-card rounded-2xl shadow-elevated border border-border overflow-hidden w-full max-w-md">
               {/* Header */}
               <div className="relative p-6 pb-0">
                 <button
@@ -106,7 +104,7 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
                 >
                   <X className="w-5 h-5 text-muted-foreground" />
                 </button>
-                
+
                 <div className="flex items-center gap-3 mb-2">
                   <div className="w-12 h-12 rounded-xl bg-gradient-primary flex items-center justify-center">
                     <LogIn className="w-6 h-6 text-primary-foreground" />
